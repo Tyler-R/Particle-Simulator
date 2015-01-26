@@ -6,10 +6,10 @@ import javax.swing.event.MouseInputListener;
 
 public class Mouse implements MouseInputListener, MouseMotionListener{
 	
-	Vector mousePosition;
+	private Screen screen;
 	
-	public Mouse(Vector mousePosition){
-		this.mousePosition = mousePosition;
+	public Mouse(Screen screen){
+		this.screen = screen;
 	}
 
 
@@ -25,15 +25,33 @@ public class Mouse implements MouseInputListener, MouseMotionListener{
 	public void mouseExited(MouseEvent arg0) {
 
 	}
-
-	public void mousePressed(MouseEvent arg0) {
-		System.out.println("mouse x = " + mousePosition.getX());
-		System.out.println("mouse y = " + mousePosition.getY());
+	
+	public void mousePressed(MouseEvent mouse) {
+		if(mouse.getButton() == MouseEvent.BUTTON1){ //if the user left clicks
+			ModeVariables.chaseMouse = false;
+		}else if(mouse.getButton() == MouseEvent.BUTTON3){ //if the user right clicks
+			
+			if(ModeVariables.spawnGravityWell){ //spawn a gravity well
+				
+				screen.spawnGravityWell(mouse.getX(), mouse.getY(), 100, 10);
+				
+			}else if(ModeVariables.spawnTarget){ //spawn a target
+				screen.spawnTarget(mouse.getX(), mouse.getY());
+				
+			}else if(ModeVariables.spawnParticleSpawner){ //spawn a particle spawner
+				screen.spawnParticleSpawner(mouse.getX(), mouse.getY(), 50, 5);
+				
+			}else if(ModeVariables.spawnRepeller){ //spawn a repeller
+				screen.spawnRepeller(mouse.getX(), mouse.getY(), 4000);
+				
+			}
+		}
 	}
 
 	public void mouseReleased(MouseEvent arg0) {
-		
-		
+		if(arg0.getButton() == MouseEvent.BUTTON1){
+			ModeVariables.chaseMouse = true;
+		}
 	}
 
 	public void mouseDragged(MouseEvent arg0) {
@@ -42,8 +60,7 @@ public class Mouse implements MouseInputListener, MouseMotionListener{
 	}
 
 	public void mouseMoved(MouseEvent mouse) {
-		mousePosition.setX(mouse.getX());
-		mousePosition.setY(mouse.getY());
+		screen.setMousePosition(mouse.getX(), mouse.getY());
 	}
 
 }

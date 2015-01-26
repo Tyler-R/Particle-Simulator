@@ -1,131 +1,68 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-import java.io.File;
-import java.io.IOException;
+import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class Frame extends JFrame{
 	private Screen screen;
+	private UserInterface userInterface;
 	
 	//width and height of frame
 	private static final int SCALE = 5;
-	public static final int WIDTH = 160 * SCALE; //800
-	public static final int HEIGHT = 120 * SCALE; //600
+	public static final int SCREEN_WIDTH = 160 * SCALE; //800
+	public static final int SCREEN_HEIGHT = 120 * SCALE; //600
+	public static final int UI_WIDTH = 160;
+	public static final int UI_HEIGHT = 120 * SCALE; //600
 	
 	//title of frame
 	private static final String TITLE = "Rendering practice";
-	
-	//private Thread thread;
-	
-	//private boolean running = false;
-	
-	/**Buffers*//*
-	private BufferStrategy bs;
-	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-	private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
-	*/
+
 	public Frame(){
+		userInterface = new UserInterface();
+		screen = new Screen(userInterface);
+		screen.start();
 		
-		setSize(WIDTH, HEIGHT);
+		setSize(SCREEN_WIDTH + UI_WIDTH, SCREEN_HEIGHT);
 		setTitle(TITLE);
-		//screen must be before set visible
-		screen = new Screen();
-		add(screen);
+		
+		setLayout(new BorderLayout());
+		
+		//screen must be added before set visible
+		add(screen, BorderLayout.CENTER);
+		add(userInterface, BorderLayout.EAST);
 		setVisible(true);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setLocationRelativeTo(null);
 		//setResizable(false);
-		//setBackground(Color.red);
-		
-		//createBufferStrategy(3);
-		//bs = getBufferStrategy();
-		
-		
-		
+
 		init();
 	}
 	
 	private void init(){
 		
-		screen.repaint();
-		//start();
-		
 	}
-	/*
-	public synchronized void start(){
-		running = true;
-		
-		thread = new Thread(this);
-		thread.start();
-	}
-	
-	public synchronized void stop(){
-		running = false;
-		
-		try{
-			thread.join();
-		}
-		catch (InterruptedException e){
-			e.printStackTrace();
-		}
-	}
-	
-	public void run(){
-		/*
-		try {
-			image = ImageIO.read(new File("full pixels.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		for(int i=0; i<500; i++){
-			for(int j=0; j<500; j++){
-				pixels[i * j] =  Color.red.getRGB();
-			}
-		}
-		
-		Graphics g = bs.getDrawGraphics();
-		
-		for(int i=0; i<500; i++){
-			for(int j=0; j<500; j++){
-				g.drawImage(image, image.getRGB(i, j), i, 1,1, null);
-			}
-		}
-		
-		g.drawImage(image,50,50,50,50,null);
-		g.fillRect(100, 100, 50, 50);
-		g.dispose();
-*//*
-		while(running){
-			
-			screen.repaint();
-			//System.out.println(Color.white.getRGB());
-		}
-		
-		
-		
-		
-		
-		
-	}
-*/
 	
 	public static void main(String[] args){
 		Frame frame = new Frame();
+		
+		//instructions for user
+		
+		System.out.println("left click to cause an explosion");
+		System.out.println("right click to place an object once it has been selected with buttons 4-7");
+		System.out.println("pressing 1 will draw the velocity vectors of each particle");
+		System.out.println("pressing 2 will switch between drawing the particles as balls and as particles");
+		System.out.println("pressing 3 will make the outside walls of the frame impassable");
+		System.out.println("pressing 4 causes your right click to spawn a gravity well");
+		System.out.println("pressing 5 causes your right click to spawn another target to chase just like your mouse");
+		System.out.println("pressing 6 causes your right click to spawn a particle spawner that will spawn new particles that will disapear after 10 seconds");
+		System.out.println("pressing 7 causes your right click to spawn a repeller that pushes particles away from it");
+		System.out.println("pressing space will cause wind to blow the particles to the right");
+		System.out.println("pressing 'c' reset all the objects that have been placed on the screen");
+		
 	}
-}
-
-class TestGC{
-	public void finalize(){
-		System.out.println("in testGC finalzie()");
-	}
-	
 }
