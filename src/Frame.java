@@ -9,6 +9,7 @@ import javax.swing.*;
 public class Frame extends JFrame{
 	private Screen screen;
 	private UserInterface userInterface;
+	private JPanel container = new JPanel();
 	
 	//width and height of frame
 	private static final int SCALE = 5;
@@ -28,11 +29,14 @@ public class Frame extends JFrame{
 		setSize(SCREEN_WIDTH + UI_WIDTH, SCREEN_HEIGHT);
 		setTitle(TITLE);
 		
-		setLayout(new BorderLayout());
+		container.setLayout(new BorderLayout());
 		
 		//screen must be added before set visible
-		add(screen, BorderLayout.CENTER);
-		add(userInterface, BorderLayout.EAST);
+		container.add(screen, BorderLayout.CENTER);
+		container.add(userInterface, BorderLayout.EAST);
+		
+		add(container);
+		
 		setVisible(true);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
